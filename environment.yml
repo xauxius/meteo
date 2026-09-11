@@ -1,0 +1,10 @@
+name: meteo
+channels:
+- conda-forge
+- defaults
+dependencies:
+- python=3.14.7
+- pandas=3.0.5
+- requests=2.34.2
+- ipykernel=7.3.0
+- numpy=2.5.3
