@@ -1,12 +1,10 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 import pandas as pd
-import numpy as np
-import functools
 import requests
-import math
 import time
 
-from utils import date_range, clamp, set_time_index
+from utils import date_range, clamp, prepare_df
+from constants import Col, LOCAL_TIMEZONE
 
 class MeteoAPI:
     def __init__(self, base_url: str, city_code: str, station_code: str):
@@ -35,9 +33,9 @@ class MeteoAPI:
                 # TODO: handle other status codes
 
         df = pd.concat(gathered_data, axis=0)
-        df = df.rename(columns={"observationTimeUtc": "timeUtc"})
-        df = set_time_index(df)
-        return df
+        df = df.rename(columns={"observationTimeUtc": Col.TIME_UTC})
+        
+        return prepare_df(df)
 
     def get_forecasts(self, forecast_type="long-term"):
         url = f"{self.base_url}/places/{self.city_code}/forecasts/{forecast_type}"
@@ -45,13 +43,13 @@ class MeteoAPI:
 
         if response.ok:
             df = pd.DataFrame(response.json()["forecastTimestamps"])
-            df = df.rename(columns={"forecastTimeUtc": "timeUtc"})
-            df = set_time_index(df)
-            return df
+            df = df.rename(columns={"forecastTimeUtc": Col.TIME_UTC})
+            return prepare_df(df)
         else:
             pass
             # TODO: handle other status codes
 
+    
 
     def rate_limit_request(self, url: str, max_retries: int = 6, wait_time: int = 2):
         response = requests.get(url)
