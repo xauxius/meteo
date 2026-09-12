@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import pandas as pd
+import requests
 
 from constants import Col, LOCAL_TIMEZONE
 
