@@ -3,8 +3,9 @@ import pandas as pd
 import requests
 import time
 
-from utils import date_range, clamp, prepare_df, warn_about_error
+from utils import date_range, clamp, prepare_df
 from constants import Col
+
 
 class MeteoAPI:
     def __init__(self, base_url: str, city_code: str, station_code: str):
